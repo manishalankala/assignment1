@@ -100,7 +100,7 @@ docker build -t 'nrpe-mysql-check:1.0.0'
 
 docker run -it nrpe-mysql-check:1.0.0
 
-docker run --name mariadb -e MYSQL_ROOT_PASSWORD=abcd -d mariadb --port 3306:3306
+docker run --name mariadb -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mariadb --port 3306:3306
 
 
 
