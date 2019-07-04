@@ -21,7 +21,32 @@ Write a docker-compose.yaml that:
 
 
 
+# NRPE
 
+The NRPE addon is designed to allow you to execute Nagios plugins on remote Linux/Unix machines. The
+main reason for doing this is to allow Nagios to monitor "local" resources (like CPU load, memory usage,
+etc.) on remote machines. Since these public resources are not usually exposed to external machines, an
+agent like NRPE must be installed on the remote Linux/Unix machines
+
+![image](https://user-images.githubusercontent.com/33985509/60676511-5bd17680-9e7f-11e9-947b-46084ff7fcaf.png)
+
+Note: The NRPE daemon requires that Nagios plugins be installed on the remote Linux/Unix host. Without
+these, the daemon wouldn't be able to monitor anything.
+
+
+NRPE Documentation for reference : https://assets.nagios.com/downloads/nagioscore/docs/nrpe/NRPE.pdf
+
+
+
+
+# Prerequisites
+* Local machine or create instance in cloud account
+* Docker
+
+
+
+
+# Instance Details
 
 Instance name : jm
 
@@ -30,12 +55,11 @@ Instance ip : 10.128.0.7
 Instance type : Centos
 
 
+## Steps to install Docker
 
 Start by updating your system packages and install the required dependencies:
 
 sudo yum update
-
-
 
 
 Now that the Docker repository is enabled, install the latest version of Docker CE (Community Edition) 
@@ -61,19 +85,23 @@ sudo systemctl status docker
 
 
 
-
-
 Executing the Docker Command Without Sudo
 
 sudo usermod -aG docker $USER
 
-
-
-
-
 we can list the images with
 
 docker image ls
+
+
+
+
+docker build -t 'nrpe-mysql-check:1.0.0'
+
+docker run -it nrpe-mysql-check:1.0.0
+
+docker run --name mariadb -e MYSQL_ROOT_PASSWORD=abcd -d mariadb --port 3306:3306
+
 
 
 
@@ -89,7 +117,7 @@ Below mentioned command
 
 # Docker File
 
-```bash
+```
 FROM ubuntu:18.04
 
 # Environment Variable
