@@ -147,3 +147,27 @@ RUN /usr/lib/nagios/plugins/check_mysql -H 10.128.0.7 -p my-secret-pw
 
 
 ![image](https://user-images.githubusercontent.com/33985509/60676039-24ae9580-9e7e-11e9-9da1-5dda8377ea56.png)
+
+
+
+
+## Docker-compose
+
+```
+
+version: '3'
+services:
+	mariadb:
+		image: mariadb
+		ports: ["3307:3307"]
+        environment:
+            MYSQL_ROOT_PASSWORD: my-secret-pw
+            MYSQL_DATABASE: mybb
+            MYSQL_USER: mybb
+            MYSQL_PASSWORD: changeme	
+	 
+    nrpe-mysql-check: 
+	    image: nrpe-mysql-check:1.0.0
+	    ports:["5001:5001"]
+
+```
