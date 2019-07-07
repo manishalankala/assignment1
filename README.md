@@ -119,29 +119,21 @@ Below mentioned command
 
 ```
 FROM ubuntu:18.04
-
-# Environment Variable
+## Environment Variable
 ENV NRPE_SERVER '192.181.1.0'
 ENV NRPE_COMMAND ''
-
 ## Installing NRPE services
 RUN apt-get update && apt-get install -y \
-
 nagios-nrpe-server \
-
 nagios-plugins \
-
 # Install the plugin of mysql_check
-
 ## Adding allowed host entry for NRPE server/configuration
 #RUN sed -i "/allowed_hosts/s/[^=]*\(.*\)$/allowed_hosts=\1, ${NRPE_SERVER}/"
-
 ## Restarting NRPE 
 #RUN sudo /etc/init.d/nagios-nrpe-server restart
-
-
 ## Run the mysql_check
-RUN /usr/lib/nagios/plugins/check_mysql -H 10.128.0.7 -p my-secret-pw
+RUN /usr/lib/nagios/plugins/check_mysql -h 10.128.0.7 -u root -pmy-secret-pw
+#CMD ["/usr/local/bin/dumb-init", "/usr/sbin/run-nrpe.sh"]
 
 ```
 
@@ -154,20 +146,15 @@ RUN /usr/lib/nagios/plugins/check_mysql -H 10.128.0.7 -p my-secret-pw
 ## Docker-compose
 
 ```
-
 version: '3'
 services:
-	mariadb:
-		image: mariadb
-		ports: ["3307:3307"]
-        environment:
-            MYSQL_ROOT_PASSWORD: my-secret-pw
-            MYSQL_DATABASE: mybb
-            MYSQL_USER: mybb
-            MYSQL_PASSWORD: changeme	
-	 
+    mariadb:
+       image: mariadb
+       ports: ["3307:3307"]
     nrpe-mysql-check: 
-	    image: nrpe-mysql-check:1.0.0
-	    ports:["5001:5001"]
+        image: .
+        ports: ["5001:5001"]
 
 ```
+
+
